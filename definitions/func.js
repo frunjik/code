@@ -36,15 +36,24 @@ FUNC.makeignore = function(arr) {
 };
 
 FUNC.mkdir = function(path, callback) {
-	var a = '/';
+	var a = F.isWindows ? '' : '/';		// @frunjik
 	path = path.split('/').trim();
 	path.wait(function(p, next) {
-		a = a + p + '/';
+
+		if (!F.isWindows) {				// @frunjik
+			a = a + p + '/';
+		} else {
+			a = a + p;
+		}
+
 		Fs.lstat(a, function(err) {
-			if (err)
+
+			if (err) {
 				Fs.mkdir(a, next);
-			else
+			}
+			else {
 				next();
+			}
 		});
 	}, callback);
 };
